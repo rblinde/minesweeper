@@ -1,0 +1,18 @@
+{
+  "name": "minesweeper",
+  "version": "0.1.0",
+  "description": "A minesweeper clone written in Typescript",
+  "scripts": {
+    "start": "parcel public/index.html",
+    "build": "parcel build public/index.html"
+  },
+  "keywords": [
+    "minesweeper",
+    "game"
+  ],
+  "author": "rblinde",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^2.7.0"
+  }
+}
