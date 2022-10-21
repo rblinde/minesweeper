@@ -1,4 +1,16 @@
-* {
+:root {
+  --teal: #028484;
+  --board-cell-size: 1.5rem;
+  --cell-backround: #c0c0c0;
+  --cell-border: #808080;
+  --cell-raised-border: #ececec;
+  --cell-clicked-background: #bdbdbd;
+  --cell-clicked-border: #999999;
+}
+
+*,
+*::after,
+*::before {
   box-sizing: border-box;
 }
 
@@ -8,4 +20,68 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  font-family: "Roboto Mono", monospace;
+  background-color: var(--teal);
+}
+
+.panels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.panel {
+  width: 4.5rem;
+  padding: 0.25rem;
+  text-align: center;
+  background: var(--cell-backround);
+  border: 1px solid var(--cell-border);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, var(--board-cell-size)));
+  grid-template-rows: repeat(8, minmax(0, var(--board-cell-size)));
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: var(--cell-backround);
+  border: solid var(--cell-border);
+  border-width: 0 1px 1px 0;
+
+  font-size: 0.9rem;
+  font-weight: bold;
+
+  cursor: pointer;
+  pointer-events: none;
+}
+
+.cell::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--cell-backround);
+  border: 2px outset var(--cell-raised-border);
+  font-size: 0.75rem;
+  text-align: center;
+  pointer-events: auto;
+}
+
+.cell:active::after {
+  background: var(--cell-clicked-background);
+  border: solid var(--cell-clicked-border);
+  border-width: 2px 0 0 2px;
+}
+
+.cell.clicked::after {
+  visibility: hidden;
 }
