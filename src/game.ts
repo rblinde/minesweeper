@@ -10,31 +10,24 @@ const randInt = (min: number, max: number): number =>
 
 
 class Game {
+  boardElem: HTMLDivElement;
   cellElems: HTMLDivElement[];
   grid: Grid;
   bombs: number;
   size: number;
 
   constructor(bombs: number, size: number) {
-    this.cellElems = [...document.querySelectorAll('.cell')] as HTMLDivElement[];
+    this.boardElem = <HTMLDivElement>document.querySelector('.board');
     this.bombs = bombs;
     this.size = size;
 
     this.fillGrid();
+    this.buildCellElems();
     this.addEventListeners();
 
     // For dev purposes only
-    this.displayGrid()
-  }
-
-
-  displayGrid() {
-    for (let i = 0; i < this.cellElems.length; i++) {
-      const y = Math.floor(i / this.size);
-      const x = i % this.size;
-      this.cellElems[i].innerHTML = this.grid[y][x];
-      this.cellElems[i].classList.add('clicked');
-    }
+    const gridAsString = this.grid.map(row => row.map(e => e.toString().padStart(2)).join(' ')).join('\n');
+    console.log(gridAsString);
   }
 
 
@@ -107,6 +100,26 @@ class Game {
     }
 
     return count;
+  }
+
+
+  /**
+   * Creates HTML grid of cell elems with x,y coordinates
+   * on data-attributes
+   */
+  private buildCellElems() {
+    this.cellElems = [];
+
+    for (let y = 0; y < this.size; y++) {
+      for (let x = 0; x < this.size; x++) {
+        const elem: HTMLDivElement = document.createElement('div');
+        elem.classList.add('cell');
+        elem.dataset.y = y.toString();
+        elem.dataset.x = x.toString();
+        this.boardElem.append(elem);
+        this.cellElems.push(elem);
+      }
+    }
   }
 
 
