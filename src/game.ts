@@ -132,8 +132,14 @@ class Game {
     e.preventDefault();
 
     const cell = e.target as HTMLDivElement;
-    const index = this.cellElems.indexOf(cell);
-    console.log(index);
+    const { x, y } = cell.dataset;
+
+    if (!x || !y) {
+      return;
+    }
+
+    cell.innerHTML = this.grid[parseInt(y)][parseInt(x)];
+    cell.classList.add('clicked');
   }
 }
 
