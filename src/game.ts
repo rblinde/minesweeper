@@ -123,12 +123,12 @@ class Game {
   }
 
 
-  addEventListeners() {
+  private addEventListeners() {
     this.cellElems.forEach(cell => cell.addEventListener('click', (e) => this.handleCellClick(e), false));
   }
 
 
-  handleCellClick(e: MouseEvent) {
+  private handleCellClick(e: MouseEvent) {
     e.preventDefault();
 
     const cell = e.target as HTMLDivElement;
