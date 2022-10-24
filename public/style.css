@@ -1,5 +1,11 @@
 :root {
   --teal: #028484;
+  --blue: #0000ff;
+  --green: #058205;
+  --red: #ff0000;
+  --darkblue: #000080;
+  --darkred: #810404;
+
   --board-cell-size: 1.5rem;
   --cell-backround: #c0c0c0;
   --cell-border: #808080;
@@ -90,4 +96,28 @@ body {
 
 .cell.clicked::after {
   visibility: hidden;
+}
+
+.cell[data-value="1"] {
+  color: var(--blue);
+}
+
+.cell[data-value="2"] {
+  color: var(--green);
+}
+
+.cell[data-value="3"] {
+  color: var(--red);
+}
+
+.cell[data-value="4"] {
+  color: var(--darkblue);
+}
+
+.cell[data-value="5"] {
+  color: var(--darkred);
+}
+
+.cell[data-value="6"] {
+  color: var(--teal);
 }

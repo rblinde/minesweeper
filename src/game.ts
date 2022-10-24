@@ -160,14 +160,12 @@ class Game {
     switch (value) {
       case -1:
         // TODO: should be game over
-        cell.innerHTML = '💣';
-        cell.classList.add('clicked');
+        this.activateCell(y, x, -1);
         break;
       case 0:
         this.discoverArea(y, x);
       default:
-        cell.innerHTML = value;
-        cell.classList.add('clicked');
+        this.activateCell(y, x, value);
         break;
     }
   }
@@ -206,9 +204,31 @@ class Game {
     }
 
     for (const [y, x] of discovered) {
-      const index = y * this.size + x;
-      this.cellElems[index].classList.add('clicked');
-      this.cellElems[index].innerHTML = this.grid[y][x];
+      this.activateCell(y, x, this.grid[y][x]);
+    }
+  }
+
+
+  /**
+   * Shows cell value with proper color or bomb
+   * emoji when value is equal to -1
+   * @param y Y position
+   * @param x X position
+   * @param value value in grid[y][x]
+   */
+  private activateCell(y: number, x: number, value: number) {
+    const index = y * this.size + x;
+    const cell = this.cellElems[index];
+    cell.classList.add('clicked');
+
+    if (value === -1) {
+      cell.innerHTML = '💣';
+      return;
+    }
+
+    if (value > 0) {
+      cell.innerHTML = value.toString();
+      cell.dataset.value = value.toString();
     }
   }
 }
