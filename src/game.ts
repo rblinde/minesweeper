@@ -1,5 +1,11 @@
 type Grid = Array<Number> | Array<Grid>;
 
+const POSSIBLE_NEIGHBOURS = [
+  [-1, -1], [-1, 0], [-1, 1],
+  [0, -1], [0, 1],
+  [1, -1], [1, 0], [1, 1],
+];
+
 const matrix = (size: number, fill: any): Grid =>
   Array.from({
     length: size
@@ -73,7 +79,33 @@ class Game {
 
 
   /**
+   * Returns a list of neighbours of `y,x` where the
+   * value in `this.grid` equals to `value` if set
+   * @param y
+   * @param x
+   * @param value value to search for
+   * @returns list of valid neighbours
+   */
+  private getValidNeighbours(y: number, x: number, value?: number): number[][] {
+    const neighbours: number[][] = [];
+
+    for (const [dy, dx] of POSSIBLE_NEIGHBOURS) {
+      const isWithinXCoords = x + dx >= 0 && x + dx < this.size;
+      const isWithinYCoords = y + dy >= 0 && y + dy < this.size;
+      const hasValue = value !== undefined;
+
+      if (isWithinXCoords && isWithinYCoords && (!hasValue || this.grid[y + dy][x + dx] === value)) {
+        neighbours.push([y + dy, x + dx]);
+      }
+    }
+
+    return neighbours;
+  }
+
+
+  /**
    * Return number of bombs in vicinity of y,x in grid
+   * Returns -1 when current cell is a bomb
    * @param y
    * @param x
    * @returns number of bombs
@@ -83,23 +115,7 @@ class Game {
       return -1;
     }
 
-    let count = 0;
-    const toCheck = [
-      [-1, -1], [-1, 0], [-1, 1],
-      [0, -1], [0, 1],
-      [1, -1], [1, 0], [1, 1],
-    ];
-
-    for (const [dy, dx] of toCheck) {
-      if (y + dy >= 0 && y + dy < this.size && // y coordinates within field
-        x + dx >= 0 && x + dx < this.size && // x coordinates within field
-        this.grid[y + dy][x + dx] === -1 // neighbour is a bomb
-      ) {
-        count += 1;
-      }
-    }
-
-    return count;
+    return this.getValidNeighbours(y, x, -1).length;
   }
 
 
@@ -156,9 +172,9 @@ class Game {
 
 
   /**
-   * Discovers an larger area when users clicks on an empty
-   * cell by opening all nearby empty cells and their
-   * neighbours
+   * Discovers an larger area when users clicks on an
+   * empty cell by opening all nearby empty cells and
+   * their neighbours
    * @param startY initial Y position
    * @param startX initial X position
    */
@@ -167,31 +183,23 @@ class Game {
     const discovered: number[][] = [];
     const seen: Set<String> = new Set();
 
-    const neighbours = [
-      [-1, -1], [-1, 0], [-1, 1],
-      [0, -1], [0, 1],
-      [1, -1], [1, 0], [1, 1],
-    ];
-
     while (toCheck.length) {
       const [y, x] = toCheck.shift() ?? [];
       const key = `${y}${x}`;
+      discovered.push([y, x]);
 
       if (seen.has(key)) {
         continue;
       }
 
       if (this.grid[y][x] === 0) {
-        for (const [dy, dx] of neighbours) {
-          if (y + dy >= 0 && y + dy < this.size && // y coordinates within field
-            x + dx >= 0 && x + dx < this.size // x coordinates within field
-          ) {
-            toCheck.push([y + dy, x + dx]);
-          }
+        const neighbours = this.getValidNeighbours(y, x);
+
+        for (const neighbour of neighbours) {
+          toCheck.push(neighbour);
         }
       }
 
-      discovered.push([y, x]);
       seen.add(key);
     }
 
