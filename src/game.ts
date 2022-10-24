@@ -138,8 +138,68 @@ class Game {
       return;
     }
 
-    cell.innerHTML = this.grid[parseInt(y)][parseInt(x)];
-    cell.classList.add('clicked');
+    const value = this.grid[parseInt(y)][parseInt(x)];
+
+    switch (value) {
+      case -1:
+        // TODO: should be game over
+        cell.innerHTML = '💣';
+        break;
+      case 0:
+        this.discoverArea(parseInt(y), parseInt(x));
+      default:
+        cell.innerHTML = value;
+        cell.classList.add('clicked');
+        break;
+    }
+  }
+
+
+  /**
+   * Discovers an larger area when users clicks on an empty
+   * cell by opening all nearby empty cells and their
+   * neighbours
+   * @param startY initial Y position
+   * @param startX initial X position
+   */
+  private discoverArea(startY: number, startX: number) {
+    const toCheck = [[startY, startX]];
+    const discovered: number[][] = [];
+    const seen: Set<String> = new Set();
+
+    const neighbours = [
+      [-1, -1], [-1, 0], [-1, 1],
+      [0, -1], [0, 1],
+      [1, -1], [1, 0], [1, 1],
+    ];
+
+    while (toCheck.length) {
+      const [y, x] = toCheck.shift() ?? [];
+      const key = `${y}${x}`;
+
+      if (seen.has(key)) {
+        continue;
+      }
+
+      if (this.grid[y][x] === 0) {
+        for (const [dy, dx] of neighbours) {
+          if (y + dy >= 0 && y + dy < this.size && // y coordinates within field
+            x + dx >= 0 && x + dx < this.size // x coordinates within field
+          ) {
+            toCheck.push([y + dy, x + dx]);
+          }
+        }
+      }
+
+      discovered.push([y, x]);
+      seen.add(key);
+    }
+
+    for (const [y, x] of discovered) {
+      const index = y * this.size + x;
+      this.cellElems[index].classList.add('clicked');
+      this.cellElems[index].innerHTML = this.grid[y][x];
+    }
   }
 }
 
