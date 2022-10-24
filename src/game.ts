@@ -148,21 +148,23 @@ class Game {
     e.preventDefault();
 
     const cell = e.target as HTMLDivElement;
-    const { x, y } = cell.dataset;
+    const x = parseInt(cell.dataset.x ?? '');
+    const y = parseInt(cell.dataset.y ?? '');
 
-    if (!x || !y) {
+    if (isNaN(x) || isNaN(y)) {
       return;
     }
 
-    const value = this.grid[parseInt(y)][parseInt(x)];
+    const value = this.grid[y][x];
 
     switch (value) {
       case -1:
         // TODO: should be game over
         cell.innerHTML = '💣';
+        cell.classList.add('clicked');
         break;
       case 0:
-        this.discoverArea(parseInt(y), parseInt(x));
+        this.discoverArea(y, x);
       default:
         cell.innerHTML = value;
         cell.classList.add('clicked');
