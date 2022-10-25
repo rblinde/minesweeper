@@ -193,15 +193,17 @@ class Game {
 
     const value = this.grid[y][x];
 
-    switch (value) {
-      case -1:
-        this.endGame();
-        break;
-      case 0:
-        this.discoverArea(y, x);
-      default:
-        this.activateCell(y, x, value);
-        break;
+    // Game over on bomb click
+    if (value === -1) {
+      this.endGame();
+      return;
+    }
+
+    // Empty cell or value
+    if (value === 0) {
+      this.discoverArea(y, x);
+    } else {
+      this.activateCell(y, x, value);
     }
   }
 
