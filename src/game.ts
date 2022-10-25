@@ -61,7 +61,7 @@ class Game {
    * Updates state value and HTML
    * @param state new value
    */
-  setState(state: string) {
+  private setState(state: string) {
     this.state = state;
     this.stateElem.innerHTML = state;
   }
