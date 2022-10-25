@@ -1,4 +1,4 @@
-type Grid = Array<Number> | Array<Grid>;
+type Grid = number[][];
 
 const POSSIBLE_NEIGHBOURS = [
   [-1, -1], [-1, 0], [-1, 1],
