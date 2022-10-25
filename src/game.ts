@@ -35,8 +35,17 @@ class Game {
     this.stateElem = <HTMLDivElement>document.querySelector('#state');
     this.bombs = bombs;
     this.size = size;
-    this.isGameOver = false;
+    // Initialize game
+    this.init();
+  }
 
+
+  /**
+   * Initializes game by resetting and
+   * (re-)filling grid
+   */
+  private init() {
+    this.isGameOver = false;
     this.setState(GAME_STATES.playing);
     this.fillGrid();
     this.buildCellElems();
