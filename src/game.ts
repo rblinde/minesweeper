@@ -20,6 +20,7 @@ class Game {
   cellElems: HTMLDivElement[];
   grid: Grid;
   bombs: number;
+  bombLocations: number[][];
   size: number;
 
   constructor(bombs: number, size: number) {
@@ -56,10 +57,11 @@ class Game {
 
   /**
    * Create `bombs` amount of bombs and places them
-   * in the grid
+   * in the grid and stores them in bombLocations
    */
   private placeBombs() {
     const bombs: number[] = [];
+    this.bombLocations = [];
 
     while (bombs.length < this.bombs) {
       const index = randInt(0, this.size * this.size);
@@ -74,6 +76,7 @@ class Game {
       const y = Math.floor(bomb / this.size);
       const x = bomb % this.size;
       this.grid[y][x] = -1;
+      this.bombLocations.push([y, x]);
     }
   }
 
@@ -160,13 +163,23 @@ class Game {
     switch (value) {
       case -1:
         // TODO: should be game over
-        this.activateCell(y, x, -1);
+        this.showAllBombs();
         break;
       case 0:
         this.discoverArea(y, x);
       default:
         this.activateCell(y, x, value);
         break;
+    }
+  }
+
+
+  /**
+   * Show all cells with bombs
+   */
+  showAllBombs() {
+    for (const [y, x] of this.bombLocations) {
+      this.activateCell(y, x, -1);
     }
   }
 
