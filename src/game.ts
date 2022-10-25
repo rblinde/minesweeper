@@ -73,7 +73,7 @@ class Game {
     for (const bomb of bombs) {
       const y = Math.floor(bomb / this.size);
       const x = bomb % this.size;
-      this.grid[x][y] = -1;
+      this.grid[y][x] = -1;
     }
   }
 
