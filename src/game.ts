@@ -1,12 +1,10 @@
-type Grid = number[][];
-
 const POSSIBLE_NEIGHBOURS = [
   [-1, -1], [-1, 0], [-1, 1],
   [0, -1], [0, 1],
   [1, -1], [1, 0], [1, 1],
 ];
 
-const matrix = (size: number, fill: any): Grid =>
+const matrix = (size: number, fill: any): number[][] =>
   Array.from({
     length: size
   }, () => new Array(size).fill(fill));
@@ -18,7 +16,7 @@ const randInt = (min: number, max: number): number =>
 class Game {
   boardElem: HTMLDivElement;
   cellElems: HTMLDivElement[];
-  grid: Grid;
+  grid: number[][];
   bombs: number;
   bombLocations: number[][];
   size: number;
