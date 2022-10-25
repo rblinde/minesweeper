@@ -1,3 +1,9 @@
+const GAME_STATES = {
+  playing: '😀',
+  loss: '😕',
+  win: '😁',
+};
+
 const POSSIBLE_NEIGHBOURS = [
   [-1, -1], [-1, 0], [-1, 1],
   [0, -1], [0, 1],
@@ -16,18 +22,22 @@ const randInt = (min: number, max: number): number =>
 class Game {
   boardElem: HTMLDivElement;
   cellElems: HTMLDivElement[];
+  stateElem: HTMLDivElement;
   grid: number[][];
   bombs: number;
   bombLocations: number[][];
   size: number;
   isGameOver: boolean;
+  state: string;
 
   constructor(bombs: number, size: number) {
     this.boardElem = <HTMLDivElement>document.querySelector('.board');
+    this.stateElem = <HTMLDivElement>document.querySelector('#state');
     this.bombs = bombs;
     this.size = size;
     this.isGameOver = false;
 
+    this.setState(GAME_STATES.playing);
     this.fillGrid();
     this.buildCellElems();
     this.addEventListeners();
@@ -35,6 +45,16 @@ class Game {
     // For dev purposes only
     const gridAsString = this.grid.map(row => row.map(e => e.toString().padStart(2)).join(' ')).join('\n');
     console.log(gridAsString);
+  }
+
+
+  /**
+   * Updates state value and HTML
+   * @param state new value
+   */
+  setState(state: string) {
+    this.state = state;
+    this.stateElem.innerHTML = state;
   }
 
 
@@ -182,6 +202,7 @@ class Game {
    */
   endGame() {
     this.isGameOver = true;
+    this.setState(GAME_STATES.loss);
     this.showAllBombs();
   }
 
