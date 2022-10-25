@@ -22,11 +22,13 @@ class Game {
   bombs: number;
   bombLocations: number[][];
   size: number;
+  isGameOver: boolean;
 
   constructor(bombs: number, size: number) {
     this.boardElem = <HTMLDivElement>document.querySelector('.board');
     this.bombs = bombs;
     this.size = size;
+    this.isGameOver = false;
 
     this.fillGrid();
     this.buildCellElems();
@@ -150,6 +152,10 @@ class Game {
   private handleCellClick(e: MouseEvent) {
     e.preventDefault();
 
+    if (this.isGameOver) {
+      return;
+    }
+
     const cell = e.target as HTMLDivElement;
     const x = parseInt(cell.dataset.x ?? '');
     const y = parseInt(cell.dataset.y ?? '');
@@ -162,8 +168,7 @@ class Game {
 
     switch (value) {
       case -1:
-        // TODO: should be game over
-        this.showAllBombs();
+        this.endGame();
         break;
       case 0:
         this.discoverArea(y, x);
@@ -171,6 +176,15 @@ class Game {
         this.activateCell(y, x, value);
         break;
     }
+  }
+
+
+  /**
+   * End game when clicking on a bomb
+   */
+  endGame() {
+    this.isGameOver = true;
+    this.showAllBombs();
   }
 
 
