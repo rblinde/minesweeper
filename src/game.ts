@@ -241,7 +241,6 @@ class Game {
     while (toCheck.length) {
       const [y, x] = toCheck.shift() ?? [];
       const key = `${y}${x}`;
-      discovered.push([y, x]);
 
       if (seen.has(key)) {
         continue;
@@ -255,6 +254,7 @@ class Game {
         }
       }
 
+      discovered.push([y, x]);
       seen.add(key);
     }
 
