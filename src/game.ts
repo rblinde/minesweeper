@@ -221,7 +221,7 @@ class Game {
   /**
    * End game when clicking on a bomb
    */
-  endGame() {
+  private endGame() {
     this.isGameOver = true;
     this.setState(GAME_STATES.loss);
     this.showAllBombs();
@@ -231,7 +231,7 @@ class Game {
   /**
    * Show all cells with bombs
    */
-  showAllBombs() {
+  private showAllBombs() {
     for (const [y, x] of this.bombLocations) {
       this.activateCell(y, x, -1);
     }
