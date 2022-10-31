@@ -29,6 +29,7 @@ class Game {
   size: number;
   isGameOver: boolean;
   state: string;
+  cellsLeft: number;
 
   constructor(bombs: number, size: number) {
     this.boardElem = <HTMLDivElement>document.querySelector('.board');
@@ -45,6 +46,7 @@ class Game {
    * (re-)filling grid
    */
   private init() {
+    this.cellsLeft = this.size * this.size;
     this.isGameOver = false;
     this.setState(GAME_STATES.playing);
     this.fillGrid();
@@ -201,9 +203,17 @@ class Game {
 
     // Empty cell or value
     if (value === 0) {
-      this.discoverArea(y, x);
+      const discovered = this.discoverArea(y, x);
+      this.cellsLeft -= discovered;
     } else {
+      this.cellsLeft -= 1;
       this.activateCell(y, x, value);
+    }
+
+    // Check for win
+    if (this.cellsLeft === this.bombs) {
+      this.isGameOver = true;
+      this.setState(GAME_STATES.win);
     }
   }
 
@@ -234,8 +244,9 @@ class Game {
    * their neighbours
    * @param startY initial Y position
    * @param startX initial X position
+   * @returns number of cells discoverd
    */
-  private discoverArea(startY: number, startX: number) {
+  private discoverArea(startY: number, startX: number): number {
     const toCheck = [[startY, startX]];
     const discovered: number[][] = [];
     const seen: Set<String> = new Set();
@@ -263,6 +274,8 @@ class Game {
     for (const [y, x] of discovered) {
       this.activateCell(y, x, this.grid[y][x]);
     }
+
+    return discovered.length;
   }
 
 
